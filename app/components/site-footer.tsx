@@ -1,4 +1,8 @@
+"use client";
+
+import { motion } from "motion/react";
 import { getWhatsAppLink } from "@/app/lib/whatsapp";
+import { FadeIn } from "@/app/components/motion-primitives";
 
 const EXPLORE_LINKS = [
   { label: "Inicio", href: "#inicio" },
@@ -133,7 +137,7 @@ function FooterBrandMark() {
 export function SiteFooter() {
   return (
     <footer id="contacto" className="bg-coffee text-cream">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4 lg:px-12 lg:py-20">
+      <FadeIn className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4 lg:px-12 lg:py-20">
         <FooterBrandMark />
 
         <div>
@@ -177,27 +181,31 @@ export function SiteFooter() {
           <h3 className="font-serif text-lg font-bold text-cream">Síguenos</h3>
           <div className="mt-4 flex items-center gap-3">
             {SOCIAL_LINKS.map((social) => (
-              <a
+              <motion.a
                 key={social.label}
                 href={social.href}
                 aria-label={social.label}
+                whileHover={{ scale: 1.1, rotate: 4 }}
+                whileTap={{ scale: 0.92 }}
                 className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-cream/15 text-cream transition-colors hover:border-gold hover:text-gold"
               >
                 {social.icon}
-              </a>
+              </motion.a>
             ))}
           </div>
 
-          <a
+          <motion.a
             href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
             className="mt-6 inline-flex items-center gap-2 rounded-lg bg-terracotta-dark px-5 py-3 font-sans text-xs font-bold uppercase tracking-wider text-cream shadow-warm-sm transition-colors hover:bg-terracotta"
           >
             Pedir ahora
-          </a>
+          </motion.a>
         </div>
-      </div>
+      </FadeIn>
 
       <div className="border-t border-cream/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 font-sans text-xs text-cream/50 sm:flex-row sm:items-center sm:justify-between lg:px-12">

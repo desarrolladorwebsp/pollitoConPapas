@@ -1,5 +1,10 @@
+"use client";
+
+import { useRef } from "react";
+import { motion } from "motion/react";
 import { DashedChickenDivider } from "@/app/components/hero-section";
 import { getWhatsAppLink } from "@/app/lib/whatsapp";
+import { FadeIn, staggerContainerVariants, fadeUpVariants } from "@/app/components/motion-primitives";
 
 const CATEGORIES = [
   "Pollos",
@@ -182,7 +187,12 @@ const DISHES: Dish[] = [
 
 function DishCard({ name, category, description, price, icon }: Dish) {
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl bg-cream shadow-warm-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-warm">
+    <motion.article
+      variants={fadeUpVariants}
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
+      className="group flex h-full flex-col overflow-hidden rounded-2xl bg-cream shadow-warm-sm transition-shadow duration-300 hover:shadow-warm"
+    >
       <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-cream-dark to-paper transition-transform duration-300 group-hover:scale-[1.03]">
         {icon}
       </div>
@@ -205,10 +215,12 @@ function DishCard({ name, category, description, price, icon }: Dish) {
           {description}
         </p>
 
-        <a
+        <motion.a
           href={getWhatsAppLink(`Hola, quiero pedir: ${name}`)}
           target="_blank"
           rel="noopener noreferrer"
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.97 }}
           className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-terracotta-dark px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-wider text-cream transition-colors hover:bg-coffee"
         >
           Pedir ahora
@@ -221,17 +233,40 @@ function DishCard({ name, category, description, price, icon }: Dish) {
               strokeLinejoin="round"
             />
           </svg>
-        </a>
+        </motion.a>
       </div>
-    </article>
+    </motion.article>
+  );
+}
+
+function CarouselArrowIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg width="18" height="14" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+      <path
+        d={direction === "right" ? "M1 6h13M9 1l5 5-5 5" : "M15 6H2M7 1 2 6l5 5"}
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
 export function MenuSection() {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  function scrollByCard(direction: "left" | "right") {
+    const track = trackRef.current;
+    if (!track) return;
+    const amount = track.clientWidth * 0.85 * (direction === "right" ? 1 : -1);
+    track.scrollBy({ left: amount, behavior: "smooth" });
+  }
+
   return (
     <section id="menu" className="bg-cream px-6 py-20 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-7xl">
-        <div className="mx-auto max-w-2xl text-center">
+        <FadeIn className="mx-auto max-w-2xl text-center">
           <h2 className="font-serif text-4xl font-bold leading-tight tracking-tight text-coffee sm:text-5xl">
             Nuestro Menú
           </h2>
@@ -243,28 +278,66 @@ export function MenuSection() {
           <p className="font-sans text-lg leading-relaxed text-coffee-soft">
             Sabores tradicionales, preparados para disfrutar.
           </p>
-        </div>
+        </FadeIn>
 
-        <ul className="mt-10 flex flex-wrap justify-center gap-3">
-          {CATEGORIES.map((category, index) => (
-            <li key={category}>
-              <span
-                className={
-                  index === 0
-                    ? "inline-block rounded-lg border-2 border-terracotta-dark bg-terracotta-dark px-4 py-2 font-sans text-xs font-bold uppercase tracking-wider text-cream"
-                    : "inline-block rounded-lg border border-coffee/15 bg-cream-dark px-4 py-2 font-sans text-xs font-bold uppercase tracking-wider text-coffee-soft"
-                }
+        <FadeIn delay={0.15}>
+          <ul className="mt-10 flex flex-wrap justify-center gap-3">
+            {CATEGORIES.map((category, index) => (
+              <li key={category}>
+                <span
+                  className={
+                    index === 0
+                      ? "inline-block rounded-lg border-2 border-terracotta-dark bg-terracotta-dark px-4 py-2 font-sans text-xs font-bold uppercase tracking-wider text-cream"
+                      : "inline-block rounded-lg border border-coffee/15 bg-cream-dark px-4 py-2 font-sans text-xs font-bold uppercase tracking-wider text-coffee-soft"
+                  }
+                >
+                  {category}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </FadeIn>
+
+        <div className="relative mt-14">
+          <motion.button
+            type="button"
+            aria-label="Plato anterior"
+            onClick={() => scrollByCard("left")}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            className="absolute left-0 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-coffee/15 bg-cream text-terracotta-dark shadow-warm-sm sm:flex h-11 w-11"
+          >
+            <CarouselArrowIcon direction="left" />
+          </motion.button>
+
+          <motion.div
+            ref={trackRef}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.15 }}
+            variants={staggerContainerVariants}
+            className="no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2"
+          >
+            {DISHES.map((dish) => (
+              <div
+                key={dish.name}
+                className="w-[80%] shrink-0 snap-start sm:w-[46%] lg:w-[31%]"
               >
-                {category}
-              </span>
-            </li>
-          ))}
-        </ul>
+                <DishCard {...dish} />
+              </div>
+            ))}
+          </motion.div>
 
-        <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {DISHES.map((dish) => (
-            <DishCard key={dish.name} {...dish} />
-          ))}
+          <motion.button
+            type="button"
+            aria-label="Plato siguiente"
+            onClick={() => scrollByCard("right")}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-coffee/15 bg-cream text-terracotta-dark shadow-warm-sm sm:flex h-11 w-11"
+          >
+            <CarouselArrowIcon direction="right" />
+          </motion.button>
         </div>
       </div>
     </section>

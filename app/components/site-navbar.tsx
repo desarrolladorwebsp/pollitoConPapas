@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import { getWhatsAppLink } from "@/app/lib/whatsapp";
 
 const NAV_LINKS = [
@@ -45,7 +48,12 @@ function BrandMark() {
 
 export function SiteNavbar() {
   return (
-    <header className="absolute inset-x-0 top-0 z-20">
+    <motion.header
+      initial={{ opacity: 0, y: -16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="absolute inset-x-0 top-0 z-20"
+    >
       <nav className="mx-auto flex max-w-7xl items-start justify-between gap-6 px-6 py-8 lg:px-12">
         <BrandMark />
 
@@ -67,10 +75,12 @@ export function SiteNavbar() {
         </ul>
 
         <div className="flex items-center gap-4 pt-1">
-          <a
+          <motion.a
             href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
             className="hidden items-center gap-2 rounded-lg bg-terracotta-dark px-5 py-3 font-sans text-xs font-bold uppercase tracking-wider text-cream shadow-warm-sm transition-colors hover:bg-coffee sm:inline-flex"
           >
             Pedir ahora
@@ -87,10 +97,11 @@ export function SiteNavbar() {
                 strokeWidth="1.3"
               />
             </svg>
-          </a>
-          <button
+          </motion.a>
+          <motion.button
             type="button"
             aria-label="Abrir menú"
+            whileTap={{ scale: 0.9 }}
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-coffee/15 text-coffee lg:hidden"
           >
             <svg
@@ -107,9 +118,9 @@ export function SiteNavbar() {
                 strokeLinecap="round"
               />
             </svg>
-          </button>
+          </motion.button>
         </div>
       </nav>
-    </header>
+    </motion.header>
   );
 }

@@ -1,5 +1,9 @@
+"use client";
+
+import { motion } from "motion/react";
 import { DashedChickenDivider } from "@/app/components/hero-section";
 import { getWhatsAppLink } from "@/app/lib/whatsapp";
+import { FadeIn, StaggerContainer, fadeUpVariants } from "@/app/components/motion-primitives";
 
 type Testimonial = {
   name: string;
@@ -65,7 +69,12 @@ function GoogleMark() {
 
 function TestimonialCard({ name, initials, quote }: Testimonial) {
   return (
-    <article className="flex flex-col gap-4 rounded-2xl bg-cream p-6 shadow-warm-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-warm">
+    <motion.article
+      variants={fadeUpVariants}
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
+      className="flex flex-col gap-4 rounded-2xl bg-cream p-6 shadow-warm-sm transition-shadow duration-300 hover:shadow-warm"
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-terracotta-dark font-serif text-sm font-bold text-cream">
@@ -82,7 +91,7 @@ function TestimonialCard({ name, initials, quote }: Testimonial) {
       <p className="font-sans text-sm leading-relaxed text-coffee-soft">
         “{quote}”
       </p>
-    </article>
+    </motion.article>
   );
 }
 
@@ -90,7 +99,7 @@ export function TestimonialsSection() {
   return (
     <section id="testimonios" className="bg-cream-dark px-6 py-20 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-7xl">
-        <div className="mx-auto max-w-2xl text-center">
+        <FadeIn className="mx-auto max-w-2xl text-center">
           <h2 className="font-serif text-4xl font-bold leading-tight tracking-tight text-coffee sm:text-5xl">
             Lo que dicen nuestros clientes
           </h2>
@@ -111,24 +120,26 @@ export function TestimonialsSection() {
               Reseñas en Google
             </span>
           </div>
-        </div>
+        </FadeIn>
 
-        <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <StaggerContainer className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {TESTIMONIALS.map((testimonial) => (
             <TestimonialCard key={testimonial.name} {...testimonial} />
           ))}
-        </div>
+        </StaggerContainer>
 
-        <div className="mt-14 text-center">
-          <a
+        <FadeIn delay={0.1} className="mt-14 text-center">
+          <motion.a
             href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
             className="inline-flex items-center gap-3 rounded-lg bg-terracotta-dark px-7 py-4 font-sans text-sm font-bold uppercase tracking-wider text-cream shadow-warm-sm transition-colors hover:bg-coffee"
           >
             Pedir ahora por WhatsApp
-          </a>
-        </div>
+          </motion.a>
+        </FadeIn>
       </div>
     </section>
   );

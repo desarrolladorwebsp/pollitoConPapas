@@ -138,6 +138,37 @@ un titular (frase de énfasis) se pinta en `text-terracotta-dark`, sin itálica.
   `bg-coffee` con texto `text-cream` y acentos `text-gold`/`text-terracotta`; usar con moderación,
   no más de una sección oscura por página.
 
+## Animaciones
+
+Librería: **`motion`** (`import { motion } from "motion/react"`). Cualquier componente que anime debe
+llevar `"use client"` al inicio del archivo. Reutiliza siempre los primitivos de
+[app/components/motion-primitives.tsx](../../app/components/motion-primitives.tsx) en vez de crear
+variantes de animación nuevas:
+
+| Primitivo | Uso |
+|---|---|
+| `FadeIn` | Envuelve bloques de encabezado (kicker + título + subtítulo) para un fade-up al entrar en viewport. Acepta `delay`. |
+| `StaggerContainer` + `fadeUpVariants` | Envuelve grids/listas (platos, testimonios, categorías); cada hijo directo debe llevar `variants={fadeUpVariants}` para animarse en cascada. |
+
+Reglas generales:
+- **Entrada en scroll** (secciones bajo el fold: Menú, Testimonios, Footer): usar `FadeIn`/`StaggerContainer`
+  con `whileInView` y `viewport={{ once: true }}` — la animación se reproduce una sola vez, nunca en cada
+  scroll.
+- **Entrada al montar** (Hero, Navbar, botón flotante de WhatsApp): usar `initial`/`animate` (no
+  `whileInView`, ya están en el viewport inicial) con un stagger corto (`delayChildren` ~0.1s).
+- **Hover/tap en elementos interactivos** (botones, tarjetas, iconos sociales): usar `whileHover`/`whileTap`
+  de `motion` en vez de `hover:scale-*`/`hover:-translate-y-*` de Tailwind, para evitar conflictos de
+  `transform`. Las clases Tailwind de color/sombra (`hover:bg-coffee`, `hover:shadow-warm`) siguen
+  aplicándose normalmente junto a `motion` porque no tocan `transform`.
+- Micro-interacciones sutiles: lift de tarjetas `whileHover={{ y: -6 }}`, botones
+  `whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}`, iconos sociales `whileHover={{ scale: 1.1 }}`.
+- Loops continuos (ej. flotado suave de la insignia del HERO, pulso del botón de WhatsApp) deben ser
+  discretos: amplitudes pequeñas, `duration` de 2-4s, `repeat: Infinity`, `ease: "easeInOut"`.
+- Nunca animar color/fondo con `motion` (eso lo resuelve Tailwind); `motion` se reserva para
+  transform/opacity (entradas, hover, loops).
+- Mantener duraciones entre 0.3s y 0.6s para transiciones de entrada; evitar animaciones largas o
+  exageradas que distraigan de la comida como protagonista.
+
 ## Responsive
 
 - Mobile-first: definir estilos base para mobile y escalar con `sm:`/`lg:`.
@@ -150,7 +181,10 @@ un titular (frase de énfasis) se pinta en `text-terracotta-dark`, sin itálica.
 
 - Reutilizar siempre los tokens de color/tipografía de `globals.css`, nunca valores hex sueltos en los
   componentes.
-- Reutilizar los componentes existentes en `app/components/` (navbar, ilustraciones, sellos) en vez de
-  crear variantes nuevas de lo mismo.
+- Reutilizar los componentes existentes en `app/components/` (navbar, ilustraciones, sellos, primitivos de
+  animación) en vez de crear variantes nuevas de lo mismo.
 - Cualquier nueva sección debe poder describirse con la misma jerarquía: kicker/etiqueta → titular serif →
   texto de apoyo sans → CTA en pastilla terracotta → imagen/ilustración con `shadow-warm`.
+- Toda sección/tarjeta/botón nuevo debe llevar las animaciones de entrada y hover descritas arriba para que
+  la página se sienta consistente e interactiva en todo el sitio, no solo en el HERO.
+
