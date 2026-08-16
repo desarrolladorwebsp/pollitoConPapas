@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  /* Paleta "Tradición Chilena" */
+  --color-cream: #f6ecd4;
+  --color-cream-dark: #ecd9ae;
+  --color-paper: #e3ce9c;
+  --color-coffee: #2e2013;
+  --color-coffee-soft: #5b4a36;
+  --color-terracotta: #9a3a24;
+  --color-terracotta-dark: #7c2a1e;
+  --color-gold: #c9a05a;
+
+  --shadow-warm: 0 20px 45px -20px rgba(58, 42, 28, 0.35);
+  --shadow-warm-sm: 0 8px 20px -10px rgba(58, 42, 28, 0.3);
+}
+
+@theme inline {
+  --color-cream: var(--color-cream);
+  --color-cream-dark: var(--color-cream-dark);
+  --color-paper: var(--color-paper);
+  --color-coffee: var(--color-coffee);
+  --color-coffee-soft: var(--color-coffee-soft);
+  --color-terracotta: var(--color-terracotta);
+  --color-terracotta-dark: var(--color-terracotta-dark);
+  --color-gold: var(--color-gold);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-script: var(--font-script);
+  --shadow-warm: var(--shadow-warm);
+  --shadow-warm-sm: var(--shadow-warm-sm);
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-coffee);
+}
+
+/* Textura sutil de papel envejecido, reutilizable en toda la landing */
+.texture-paper {
+  position: relative;
+  isolation: isolate;
+}
+
+.texture-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  background-image: radial-gradient(
+      rgba(58, 42, 28, 0.05) 1px,
+      transparent 1px
+    ),
+    radial-gradient(rgba(58, 42, 28, 0.04) 1px, transparent 1px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 2px 3px;
+}
+
