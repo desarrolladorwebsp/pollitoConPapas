@@ -35,6 +35,22 @@ const DISHES: Dish[] = [
     imageAlt: "Trutro de pollo dorado con arroz y papas fritas",
   },
   {
+    name: "Pollo Completo",
+    category: "Pollos",
+    description: "Pollo entero dorado y jugoso, ideal para compartir con papas y acompañamientos.",
+    price: "$13.000",
+    imageSrc: "/images/menu/pollo-entero.png",
+    imageAlt: "Pollo entero dorado y jugoso",
+  },
+  {
+    name: "Medio Pollo",
+    category: "Pollos",
+    description: "Medio pollo a la brasa con papas fritas y sabor casero de la casa.",
+    price: "$7.000",
+    imageSrc: "/images/menu/pollo-entero.png",
+    imageAlt: "Medio pollo dorado con papas fritas",
+  },
+  {
     name: "Empanada de Pino",
     category: "Comida Chilena",
     description: "Empanada horneada rellena de pino casero tradicional.",

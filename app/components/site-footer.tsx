@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import { getWhatsAppLink } from "@/app/lib/whatsapp";
 import { FadeIn } from "@/app/components/motion-primitives";
@@ -210,7 +211,26 @@ export function SiteFooter() {
       <div className="border-t border-cream/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 font-sans text-xs text-cream/50 sm:flex-row sm:items-center sm:justify-between lg:px-12">
           <p>© {new Date().getFullYear()} Pollitos con Papas. Todos los derechos reservados.</p>
-          <p>Hecho con cariño en Chile</p>
+          <div className="flex items-center gap-2 text-cream/60">
+            <span>Hecho con cariño en Chile</span>
+            <span className="text-cream/30">|</span>
+            <span>Creado por</span>
+            <a
+              href="https://www.smartpro.cl"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="SmartPro"
+              className="inline-flex items-center transition-opacity hover:opacity-80"
+            >
+              <Image
+                src="/images/logo-smartpro.png"
+                alt="SmartPro logo"
+                width={72}
+                height={24}
+                className="h-6 w-auto object-contain"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
