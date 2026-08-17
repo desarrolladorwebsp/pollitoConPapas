@@ -30,22 +30,18 @@ export function HeroSection() {
   return (
     <section
       id="inicio"
-      className="relative min-h-[720px] overflow-hidden bg-cream-dark lg:min-h-[820px]"
+      className="hero-background relative min-h-[max(100svh,210.76vw)] overflow-hidden bg-cream lg:min-h-[min(100svh,66.67vw)]"
     >
+
       <SiteNavbar />
 
-      {/* Fondo ilustrado discreto de granja, apoya el bloque de marca/insignia */}
-      <div className="pointer-events-none absolute bottom-0 left-0 h-40 w-full max-w-md">
-        <FarmhouseLineArt />
-      </div>
-
-      <div className="relative mx-auto grid max-w-7xl gap-10 px-6 pb-16 pt-40 lg:grid-cols-12 lg:items-center lg:gap-8 lg:px-12 lg:pb-24 lg:pt-48">
+      <div className="relative z-10 mx-auto grid min-h-[inherit] max-w-7xl gap-10 px-6 pb-16 pt-36 lg:grid-cols-12 lg:items-center lg:gap-8 lg:px-12 lg:pb-24 lg:pt-48">
         {/* Contenido */}
         <motion.div
           initial="hidden"
           animate="visible"
           variants={staggerContainerVariants}
-          className="relative z-10 lg:col-span-5"
+          className="relative z-10 flex max-w-xl flex-col lg:col-span-5 lg:block"
         >
           <motion.h1
             variants={fadeUpVariants}
@@ -69,12 +65,13 @@ export function HeroSection() {
             el sabor de la tradición chilena.
           </motion.p>
 
-          <motion.div variants={fadeUpVariants} className="mt-9 flex flex-wrap items-center gap-6">
+          {/* En móvil el CTA baja al pie de la sección para dejar libre la vista del plato */}
+          <motion.div variants={fadeUpVariants} className="mt-auto flex flex-wrap items-center gap-6 pt-14 lg:mt-9 lg:pt-0">
             <motion.a
               href="#menu"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-3 rounded-lg bg-terracotta-dark px-7 py-4 font-sans text-sm font-bold uppercase tracking-wider text-cream shadow-warm-sm transition-colors hover:bg-coffee"
+              className="inline-flex items-center gap-3 rounded-lg bg-terracotta-dark px-7 py-4 font-sans text-sm font-bold uppercase tracking-wider text-cream shadow-[0_14px_28px_rgba(95,43,30,0.25)] ring-1 ring-cream/30 transition-colors hover:bg-coffee"
             >
               Ver nuestro menú
               <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
@@ -87,43 +84,11 @@ export function HeroSection() {
                 />
               </svg>
             </motion.a>
-
-            
           </motion.div>
         </motion.div>
 
-        {/* Espaciador: la fotografía se ancla en un bloque a pantalla completa */}
         <div className="hidden lg:col-span-7 lg:block" aria-hidden="true" />
       </div>
-
-      {/* Fotografía / ilustración gastronómica a sangre, protagonista del HERO */}
-      <motion.div
-        initial={{ opacity: 0, scale: 1.05 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
-        className="absolute inset-y-0 right-0 w-full lg:w-[56%]"
-      >
-        <div className="relative h-full w-full">
-          <ChickenPlateIllustration />
-
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-            className="absolute right-6 top-24 max-w-[13rem] text-right font-script text-2xl leading-tight text-cream drop-shadow-sm sm:top-28 sm:text-3xl"
-          >
-            Más que un pollo, una tradición que nos une. ✶
-          </motion.p>
-
-          <motion.div
-            className="absolute -bottom-6 left-4 z-10 sm:left-8 lg:-left-10"
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <HeritageStamp />
-          </motion.div>
-        </div>
-      </motion.div>
     </section>
   );
 }

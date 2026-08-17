@@ -1,9 +1,14 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useRef, useState } from "react";
 import { DashedChickenDivider } from "@/app/components/hero-section";
 import { getWhatsAppLink } from "@/app/lib/whatsapp";
-import { FadeIn, StaggerContainer, fadeUpVariants } from "@/app/components/motion-primitives";
+import {
+  FadeIn,
+  fadeUpVariants,
+  staggerContainerVariants,
+} from "@/app/components/motion-primitives";
 
 type Testimonial = {
   name: string;
@@ -96,6 +101,36 @@ function TestimonialCard({ name, initials, quote }: Testimonial) {
 }
 
 export function TestimonialsSection() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+
+  function updateActiveTestimonial() {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const cards = Array.from(track.children);
+    const closestIndex = cards.reduce(
+      (closest, card, index) => {
+        const currentDistance = Math.abs(card.getBoundingClientRect().left - track.getBoundingClientRect().left);
+        const closestDistance = Math.abs(
+          cards[closest].getBoundingClientRect().left - track.getBoundingClientRect().left,
+        );
+        return currentDistance < closestDistance ? index : closest;
+      },
+      0,
+    );
+
+    setActiveTestimonial(closestIndex);
+  }
+
+  function scrollToTestimonial(index: number) {
+    const card = trackRef.current?.children[index];
+    if (!(card instanceof HTMLElement)) return;
+
+    card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    setActiveTestimonial(index);
+  }
+
   return (
     <section id="testimonios" className="bg-cream-dark px-6 py-20 lg:px-12 lg:py-28">
       <div className="mx-auto max-w-7xl">
@@ -122,11 +157,36 @@ export function TestimonialsSection() {
           </div>
         </FadeIn>
 
-        <StaggerContainer className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          ref={trackRef}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={staggerContainerVariants}
+          onScroll={updateActiveTestimonial}
+          className="no-scrollbar mt-14 flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible sm:snap-none lg:grid-cols-3"
+        >
           {TESTIMONIALS.map((testimonial) => (
-            <TestimonialCard key={testimonial.name} {...testimonial} />
+            <div key={testimonial.name} className="w-[88%] shrink-0 snap-start sm:w-auto sm:shrink">
+              <TestimonialCard {...testimonial} />
+            </div>
           ))}
-        </StaggerContainer>
+        </motion.div>
+
+        <div className="mt-6 flex justify-center gap-2 sm:hidden" aria-label="Navegación de testimonios">
+          {TESTIMONIALS.map((testimonial, index) => (
+            <button
+              key={testimonial.name}
+              type="button"
+              aria-label={`Ver testimonio de ${testimonial.name}`}
+              aria-current={activeTestimonial === index ? "true" : undefined}
+              onClick={() => scrollToTestimonial(index)}
+              className={`h-2.5 w-2.5 rounded-full border border-terracotta-dark transition-colors ${
+                activeTestimonial === index ? "bg-terracotta-dark" : "bg-transparent"
+              }`}
+            />
+          ))}
+        </div>
 
         <FadeIn delay={0.1} className="mt-14 text-center">
           <motion.a

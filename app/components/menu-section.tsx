@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
-import { motion } from "motion/react";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { DashedChickenDivider } from "@/app/components/hero-section";
 import { getWhatsAppLink } from "@/app/lib/whatsapp";
 import { FadeIn, staggerContainerVariants, fadeUpVariants } from "@/app/components/motion-primitives";
@@ -19,183 +20,71 @@ type Dish = {
   category: string;
   description: string;
   price: string;
-  icon: React.ReactNode;
+  imageSrc: string;
+  imageAlt: string;
 };
-
-function DrumstickIcon({ label }: { label: string }) {
-  return (
-    <svg
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="none"
-      role="img"
-      aria-label={label}
-      className="text-terracotta-dark"
-    >
-      <path
-        d="M40 14c6 4 9 11 6 18-2 5-6 8-9 12-3 4-3 8 0 11a5 5 0 1 1-7 7c-5-5-6-11-3-17l-9-9c-6 3-12 2-17-3a5 5 0 1 1 7-7c3 3 7 3 11 0 4-3 7-7 12-9 3-1.3 6.5-2 9-3z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function FriesIcon({ label }: { label: string }) {
-  return (
-    <svg
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="none"
-      role="img"
-      aria-label={label}
-      className="text-terracotta-dark"
-    >
-      <path
-        d="M16 28 12 52a3 3 0 0 0 3 3.4h34a3 3 0 0 0 3-3.4l-4-24"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path d="M14 28h36" stroke="currentColor" strokeWidth="2" />
-      {[20, 27, 34, 41, 48].map((x, i) => (
-        <rect
-          key={x}
-          x={x - 2.5}
-          y={i % 2 === 0 ? 10 : 15}
-          width="5"
-          height={i % 2 === 0 ? 20 : 15}
-          rx="1.5"
-          stroke="currentColor"
-          strokeWidth="1.6"
-        />
-      ))}
-    </svg>
-  );
-}
-
-function SandwichIcon({ label }: { label: string }) {
-  return (
-    <svg
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="none"
-      role="img"
-      aria-label={label}
-      className="text-terracotta-dark"
-    >
-      <path
-        d="M10 40h44a4 4 0 0 1 0 8H10a4 4 0 0 1 0-8Z"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path
-        d="M14 40c2-10 8-18 18-18s16 8 18 18"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M18 32c4-2 8-2 14 0s10 2 14 0"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function EmpanadaIcon({ label }: { label: string }) {
-  return (
-    <svg
-      width="64"
-      height="64"
-      viewBox="0 0 64 64"
-      fill="none"
-      role="img"
-      aria-label={label}
-      className="text-terracotta-dark"
-    >
-      <path
-        d="M12 32c0-13 9-22 20-22s20 9 20 22-9 20-20 20-20-7-20-20Z"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      {[20, 27, 34, 41].map((x) => (
-        <path
-          key={x}
-          d={`M${x - 3} 44l6-6`}
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-        />
-      ))}
-    </svg>
-  );
-}
 
 const DISHES: Dish[] = [
   {
-    name: "Pollo con Papas",
+    name: "Trutro con Papas",
     category: "Pollos",
     description:
-      "Pollo dorado al horno acompañado de papas fritas bien crujientes.",
+      "Trutro de pollo dorado acompañado de arroz y papas fritas caseras.",
     price: "$6.990",
-    icon: <DrumstickIcon label="Fotografía de Pollo con Papas" />,
-  },
-  {
-    name: "Chorrillana",
-    category: "Comida Chilena",
-    description:
-      "Papas fritas con carne, cebolla caramelizada y huevo, para compartir.",
-    price: "$9.990",
-    icon: <FriesIcon label="Fotografía de Chorrillana" />,
-  },
-  {
-    name: "Completo Italiano",
-    category: "Comida Chilena",
-    description: "Vienesa, palta, tomate y mayonesa en pan caliente.",
-    price: "$3.490",
-    icon: <SandwichIcon label="Fotografía de Completo Italiano" />,
+    imageSrc: "/images/menu/trutro.png",
+    imageAlt: "Trutro de pollo dorado con arroz y papas fritas",
   },
   {
     name: "Empanada de Pino",
     category: "Comida Chilena",
     description: "Empanada horneada rellena de pino casero tradicional.",
     price: "$2.490",
-    icon: <EmpanadaIcon label="Fotografía de Empanada de Pino" />,
+    imageSrc: "/images/menu/empanada-de-pino.png",
+    imageAlt: "Empanadas de pino horneadas",
   },
   {
-    name: "Pollo Crispy",
-    category: "Pollos",
-    description: "Trozos de pollo crocante por fuera y jugoso por dentro.",
-    price: "$5.990",
-    icon: <DrumstickIcon label="Fotografía de Pollo Crispy" />,
+    name: "Cazuela de la Casa",
+    category: "Comida Chilena",
+    description: "Caldo casero con pollo, arroz, papa, zapallo y verduras.",
+    price: "$7.990",
+    imageSrc: "/images/menu/casuela.png",
+    imageAlt: "Cazuela casera con pollo, arroz y verduras",
   },
   {
-    name: "Papas Caseras",
-    category: "Papas y acompañamientos",
-    description: "Papas cortadas a mano, doradas y crujientes al horno.",
-    price: "$3.990",
-    icon: <FriesIcon label="Fotografía de Papas Caseras" />,
+    name: "Porotos con Riendas",
+    category: "Comida Chilena",
+    description: "Porotos guisados con tallarines, longaniza y sabor casero.",
+    price: "$6.990",
+    imageSrc: "/images/menu/porotos-con-rienda.png",
+    imageAlt: "Porotos con riendas y longaniza",
   },
 ];
 
-function DishCard({ name, category, description, price, icon }: Dish) {
+function DishCard({ name, category, description, price, imageSrc, imageAlt }: Dish) {
+  const [isImageOpen, setIsImageOpen] = useState(false);
+
   return (
-    <motion.article
-      variants={fadeUpVariants}
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 300, damping: 22 }}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl bg-cream shadow-warm-sm transition-shadow duration-300 hover:shadow-warm"
-    >
-      <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-cream-dark to-paper transition-transform duration-300 group-hover:scale-[1.03]">
-        {icon}
-      </div>
+    <>
+      <motion.article
+        variants={fadeUpVariants}
+        whileHover={{ y: -6 }}
+        transition={{ type: "spring", stiffness: 300, damping: 22 }}
+        className="group flex h-full flex-col overflow-hidden rounded-2xl bg-cream shadow-warm-sm transition-shadow duration-300 hover:shadow-warm"
+      >
+        <button
+          type="button"
+          aria-label={`Ver imagen completa: ${name}`}
+          onClick={() => setIsImageOpen(true)}
+          className="relative aspect-[4/5] w-full overflow-hidden bg-cream-dark text-left transition-transform duration-300 group-hover:scale-[1.03]"
+        >
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            fill
+            sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, 80vw"
+            className="object-cover"
+          />
+        </button>
 
       <div className="flex flex-1 flex-col gap-3 p-6">
         <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-gold">
@@ -235,7 +124,50 @@ function DishCard({ name, category, description, price, icon }: Dish) {
           </svg>
         </motion.a>
       </div>
-    </motion.article>
+      </motion.article>
+
+      <AnimatePresence>
+        {isImageOpen && (
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Imagen completa: ${name}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-coffee/85 p-5 sm:p-10"
+            onClick={() => setIsImageOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="relative h-full w-full max-w-3xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <Image
+                src={imageSrc}
+                alt={imageAlt}
+                fill
+                sizes="100vw"
+                className="object-contain"
+              />
+              <button
+                type="button"
+                aria-label="Cerrar imagen"
+                onClick={() => setIsImageOpen(false)}
+                className="absolute right-0 top-0 inline-flex h-10 w-10 items-center justify-center rounded-full bg-cream text-coffee shadow-warm-sm"
+              >
+                <span aria-hidden="true" className="text-2xl leading-none">
+                  x
+                </span>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 

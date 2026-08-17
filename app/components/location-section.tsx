@@ -1,54 +1,32 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { DashedChickenDivider } from "@/app/components/hero-section";
 import { FadeIn } from "@/app/components/motion-primitives";
 
-const ADDRESS = "Av. Providencia 1234, Santiago, Chile";
+const ADDRESS = "Pasaje Chañaral 510, Copiapó, Tercera Región, Chile";
 const MAP_QUERY = encodeURIComponent(ADDRESS);
 const MAP_EMBED_SRC = `https://www.google.com/maps?q=${MAP_QUERY}&output=embed`;
 const MAP_DIRECTIONS_HREF = `https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`;
 
-function StorefrontIcon() {
-  return (
-    <svg width="56" height="56" viewBox="0 0 64 64" fill="none" aria-hidden="true" className="text-terracotta-dark">
-      <path d="M8 26v26h48V26" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-      <path
-        d="M6 14h52l4 12a6 6 0 0 1-11 4 6 6 0 0 1-11 0 6 6 0 0 1-11 0 6 6 0 0 1-11 0 6 6 0 0 1-11-4l4-12Z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path d="M24 52V36h16v16" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function TableIcon() {
-  return (
-    <svg width="56" height="56" viewBox="0 0 64 64" fill="none" aria-hidden="true" className="text-terracotta-dark">
-      <ellipse cx="32" cy="26" rx="22" ry="8" stroke="currentColor" strokeWidth="2" />
-      <path d="M10 26v8c0 4.4 9.8 8 22 8s22-3.6 22-8v-8" stroke="currentColor" strokeWidth="2" />
-      <path d="M18 42v10M46 42v10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function CounterIcon() {
-  return (
-    <svg width="56" height="56" viewBox="0 0 64 64" fill="none" aria-hidden="true" className="text-terracotta-dark">
-      <path d="M6 30h52v10a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4V30Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-      <path d="M6 30l6-16h40l6 16" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-      <circle cx="32" cy="18" r="4" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-  );
-}
-
 const GALLERY = [
-  { title: "Nuestro local en Providencia", icon: <StorefrontIcon /> },
-  { title: "Mesas familiares para compartir", icon: <TableIcon /> },
-  { title: "Atención cercana en el mesón", icon: <CounterIcon /> },
+  {
+    title: "Nuestro local en Copiapó",
+    src: "/images/us/1.png",
+    alt: "Fachada de Pollito con Papas en Copiapó",
+  },
+  {
+    title: "Mesas familiares para compartir",
+    src: "/images/us/2.png",
+    alt: "Comedor interior de Pollito con Papas",
+  },
+  {
+    title: "El sabor de siempre",
+    src: "/images/us/3.png",
+    alt: "Pollo asado con arroz y papas fritas",
+  },
 ];
 
 function useAutoRotate(length: number, intervalMs = 4000) {
@@ -95,12 +73,21 @@ export function LocationSection() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-cream-dark to-paper"
+                  className="absolute inset-0"
                 >
-                  {GALLERY[index].icon}
-                  <p className="font-serif text-lg font-bold text-coffee">
-                    {GALLERY[index].title}
-                  </p>
+                  <Image
+                    src={GALLERY[index].src}
+                    alt={GALLERY[index].alt}
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                    priority={index === 0}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-coffee/70 to-transparent px-6 pb-6 pt-16">
+                    <p className="font-serif text-lg font-bold text-cream">
+                      {GALLERY[index].title}
+                    </p>
+                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>

@@ -160,7 +160,7 @@ export function SiteFooter() {
               <span className="mt-0.5 text-gold">
                 <LocationIcon />
               </span>
-              Av. Providencia 1234, Santiago
+              Pasaje Chañaral 510, Copiapó, Tercera Región
             </li>
             <li className="flex items-center gap-2">
               <span className="text-gold">

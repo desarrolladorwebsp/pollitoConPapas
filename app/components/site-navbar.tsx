@@ -57,7 +57,7 @@ export function SiteNavbar() {
       <nav className="mx-auto flex max-w-7xl items-start justify-between gap-6 px-6 py-8 lg:px-12">
         <BrandMark />
 
-        <ul className="hidden items-center gap-8 pt-2 font-sans text-sm font-medium text-coffee lg:flex">
+        <ul className="hidden items-center gap-8 rounded-2xl border border-coffee/10 bg-cream/85 px-5 py-3 font-sans text-sm font-medium text-coffee shadow-warm-sm lg:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <a
